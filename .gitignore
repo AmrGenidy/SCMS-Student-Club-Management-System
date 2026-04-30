@@ -37,3 +37,17 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Maven
+target/
+
+# Compiled output
+*.class
+
+# OS files
+.DS_Store
