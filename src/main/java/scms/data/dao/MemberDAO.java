@@ -7,39 +7,61 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MemberDAO {
-    public boolean addMember(Member member) throws SQLException
+public class MemberDAO
+{
+    public boolean insertMember(Member member) throws SQLException
     {
-        final String sql = "INSERT INTO members (member_id, name, email) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO members (name, student_id, email, role) VALUES (?, ?, ?, ?)";
         Connection connection = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
         {
-            preparedStatement.setInt(1, member.getMemberId());
-            preparedStatement.setString(2, member.getName());
+            preparedStatement.setString(1, member.getName());
+            preparedStatement.setString(2, member.getStudentId());
             preparedStatement.setString(3, member.getEmail());
+            preparedStatement.setString(4, member.getRole());
             return preparedStatement.executeUpdate() > 0;
         }
     }
 
-    public List<Member> fetchAllMembers() throws SQLException {
-        final String sql = "SELECT member_id, name, email FROM members";
-        List<Member> members = new ArrayList<>();
+    public Member findMemberById(String id) throws SQLException
+    {
+        final String sql = "SELECT name, student_id, email, role FROM members WHERE student_id = ?";
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery())
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
         {
-            while (resultSet.next())
+            preparedStatement.setString(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery())
             {
-                members.add(new Member(
-                        resultSet.getInt("member_id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("email")
-                ));
+                if (resultSet.next())
+                {
+                    return new Member(
+                            resultSet.getString("name"),
+                            resultSet.getString("student_id"),
+                            resultSet.getString("email"),
+                            resultSet.getString("role")
+                    );
+                }
             }
         }
-        return members;
+        return null;
+    }
+
+    public boolean isIdUnique(String id) throws SQLException
+    {
+        final String sql = "SELECT COUNT(*) FROM members WHERE student_id = ?";
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setString(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    return resultSet.getInt(1) == 0;
+                }
+            }
+        }
+        return false;
     }
 }

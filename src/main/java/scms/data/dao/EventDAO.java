@@ -3,44 +3,107 @@ package scms.data.dao;
 import scms.application.model.Event;
 import scms.data.DatabaseConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EventDAO
 {
-    public boolean createEvent(Event event) throws SQLException
+    public boolean insertEvent(Event event) throws SQLException
     {
-        final String sql = "INSERT INTO events (event_id, title, date, location) VALUES (?, ?, ?, ?)";
+        final String sql = "INSERT INTO events (event_id, name, date, location, quota, current_attendees) VALUES (?, ?, ?, ?, ?, ?)";
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        try (PreparedStatement pstmt = connection.prepareStatement(sql))
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
         {
-            pstmt.setInt(1, event.getEventId());
-            pstmt.setString(2, event.getTitle());
-            pstmt.setDate(3, new java.sql.Date(event.getDate().getTime()));
-            pstmt.setString(4, event.getLocation());
-            return pstmt.executeUpdate() > 0;
+            preparedStatement.setInt(1, event.getEventId());
+            preparedStatement.setString(2, event.getName());
+            preparedStatement.setDate(3, new java.sql.Date(event.getDate().getTime()));
+            preparedStatement.setString(4, event.getLocation());
+            preparedStatement.setInt(5, event.getQuota());
+            preparedStatement.setInt(6, event.getCurrentAttendees());
+            return preparedStatement.executeUpdate() > 0;
         }
     }
 
-    public List<Event> fetchAllEvents() throws SQLException
+    public List<Event> getUpcomingEvents(Date currentDate) throws SQLException
     {
-        final String sql = "SELECT * FROM events ORDER BY date ASC";
+        final String sql = "SELECT event_id, name, date, location, quota, current_attendees FROM events WHERE date >= ? ORDER BY date ASC";
         List<Event> events = new ArrayList<>();
         Connection connection = DatabaseConnection.getInstance().getConnection();
-        try (PreparedStatement pstmt = connection.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery())
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
         {
-            while (rs.next())
+            preparedStatement.setDate(1, new java.sql.Date(currentDate.getTime()));
+            try (ResultSet resultSet = preparedStatement.executeQuery())
             {
-                events.add(new Event(
-                        rs.getInt("event_id"),
-                        rs.getString("title"),
-                        rs.getDate("date"),
-                        rs.getString("location")
-                ));
+                while (resultSet.next())
+                {
+                    Event event = new Event(
+                            resultSet.getInt("event_id"),
+                            resultSet.getString("name"),
+                            resultSet.getDate("date"),
+                            resultSet.getString("location"),
+                            resultSet.getInt("quota"),
+                            resultSet.getInt("current_attendees")
+                    );
+                    events.add(event);
+                }
             }
         }
         return events;
+    }
+
+    public int getAttendeeCount() throws SQLException
+    {
+        final String sql = "SELECT SUM(current_attendees) AS total_attendees FROM events";
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery())
+        {
+            if (resultSet.next())
+            {
+                return resultSet.getInt("total_attendees");
+            }
+        }
+        return 0;
+    }
+
+    public Event findEventById(int eventId) throws SQLException
+    {
+        final String sql = "SELECT event_id, name, date, location, quota, current_attendees FROM events WHERE event_id = ?";
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setInt(1, eventId);
+            try (ResultSet resultSet = preparedStatement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    return new Event(
+                            resultSet.getInt("event_id"),
+                            resultSet.getString("name"),
+                            resultSet.getDate("date"),
+                            resultSet.getString("location"),
+                            resultSet.getInt("quota"),
+                            resultSet.getInt("current_attendees")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean incrementAttendeeCount(int eventId) throws SQLException
+    {
+        final String sql = "UPDATE events SET current_attendees = current_attendees + 1 WHERE event_id = ?";
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql))
+        {
+            preparedStatement.setInt(1, eventId);
+            return preparedStatement.executeUpdate() > 0;
+        }
     }
 }

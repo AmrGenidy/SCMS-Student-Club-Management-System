@@ -38,11 +38,11 @@ public class TransactionDAO
             while (resultSet.next())
             {
                 Transaction transaction = new Transaction(
-                    resultSet.getInt("transaction_id"),
-                    resultSet.getString("type"),
-                    resultSet.getDouble("amount"),
-                    resultSet.getString("description"),
-                    resultSet.getDate("date")
+                        resultSet.getInt("transaction_id"),
+                        resultSet.getString("type"),
+                        resultSet.getDouble("amount"),
+                        resultSet.getString("description"),
+                        resultSet.getDate("date")
                 );
                 transactions.add(transaction);
             }
