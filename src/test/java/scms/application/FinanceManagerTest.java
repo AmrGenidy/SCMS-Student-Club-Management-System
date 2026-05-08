@@ -29,4 +29,31 @@ class FinanceManagerTest
 
         assertEquals(800.0, remainingBudget, 0.0001);
     }
+
+    @Test
+    void testFinance_EmptyBudget() throws SQLException
+    {
+        TransactionDAO transactionDAO = mock(TransactionDAO.class);
+        FinanceManager financeManager = new FinanceManager(transactionDAO);
+
+        when(transactionDAO.fetchAllTransactions()).thenReturn(Arrays.asList());
+
+        double remainingBudget = financeManager.calculateRemainingBudget();
+
+        assertEquals(0.0, remainingBudget, 0.0001);
+    }
+
+    @Test
+    void testFinance_OnlyIncome() throws SQLException
+    {
+        TransactionDAO transactionDAO = mock(TransactionDAO.class);
+        FinanceManager financeManager = new FinanceManager(transactionDAO);
+
+        Transaction income = new Transaction(1, "INCOME", 500.0, "Gift", new Date());
+        when(transactionDAO.fetchAllTransactions()).thenReturn(Arrays.asList(income));
+
+        double remainingBudget = financeManager.calculateRemainingBudget();
+
+        assertEquals(500.0, remainingBudget, 0.0001);
+    }
 }
