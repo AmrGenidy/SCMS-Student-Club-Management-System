@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scms.presentation.FinanceController" style="-fx-background-color: #1a1a2e;">
+    <Label text="Financial Management" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
+
+    <HBox spacing="20">
+        <!-- Budget Card -->
+        <VBox spacing="5" prefWidth="250" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f33; -fx-border-radius: 10; -fx-border-width: 1;">
+            <Label text="REMAINING BUDGET" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+            <Label fx:id="budgetLabel" text="$0.00" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #f7dc6f;"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Add Transaction Form -->
+        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f33; -fx-border-radius: 10;">
+            <Label text="New Transaction" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f7dc6f;"/>
+
+            <VBox spacing="5">
+                <Label text="Transaction ID" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
+                <TextField fx:id="idField" promptText="Enter ID (numeric)" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Type" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
+                <ComboBox fx:id="typeComboBox" maxWidth="Infinity" style="-fx-background-color: #0f3460;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Amount" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
+                <TextField fx:id="amountField" promptText="e.g. 100.00" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Description" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
+                <TextArea fx:id="descriptionArea" prefHeight="80" promptText="Enter details" style="-fx-control-inner-background: #0f3460; -fx-text-fill: #e0e0e0;"/>
+            </VBox>
+
+            <Button text="Record Transaction" onAction="#handleRecordTransaction" maxWidth="Infinity" style="-fx-background-color: #f7dc6f; -fx-text-fill: #1a1a2e; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10; -fx-cursor: hand;"/>
+        </VBox>
+
+        <!-- Transaction History -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS">
+            <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS" style="-fx-background-color: #16213e; -fx-border-color: #2a2a4a;">
+                <columns>
+                    <TableColumn fx:id="dateCol" text="Date" prefWidth="120"/>
+                    <TableColumn fx:id="typeCol" text="Type" prefWidth="100"/>
+                    <TableColumn fx:id="amountCol" text="Amount" prefWidth="100"/>
+                    <TableColumn fx:id="descCol" text="Description" prefWidth="250"/>
+                </columns>
+                <placeholder>
+                    <Label text="No transactions recorded" style="-fx-text-fill: #555566;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </HBox>
+</VBox>

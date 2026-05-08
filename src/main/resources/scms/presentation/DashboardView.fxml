@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="scms.presentation.DashboardController"
+            prefWidth="980" prefHeight="640"
+            style="-fx-background-color: #1a1a2e;">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="4" prefWidth="220"
+              style="-fx-background-color: #16213e; -fx-padding: 0;">
+
+            <!-- App Header in Sidebar -->
+            <VBox alignment="CENTER" spacing="4"
+                  style="-fx-padding: 24 16 20 16; -fx-border-color: #2a2a4a; -fx-border-width: 0 0 1 0;">
+                <Label text="🎓 SCMS"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e94560;"/>
+                <Label fx:id="currentUserLabel"
+                       text="Welcome"
+                       style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+            </VBox>
+
+            <!-- Nav Buttons -->
+            <VBox spacing="2" style="-fx-padding: 12 8;">
+                <Button fx:id="btnDashboard" text="📊  Dashboard" maxWidth="Infinity"
+                        onAction="#showDashboard"
+                        style="-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
+                <Button fx:id="btnMembers" text="👥  Members" maxWidth="Infinity"
+                        onAction="#showMembers"
+                        style="-fx-background-color: transparent; -fx-text-fill: #a0a0b0; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
+                <Button fx:id="btnEvents" text="📅  Events" maxWidth="Infinity"
+                        onAction="#showEvents"
+                        style="-fx-background-color: transparent; -fx-text-fill: #a0a0b0; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
+                <Button fx:id="btnFinance" text="💰  Finance" maxWidth="Infinity"
+                        onAction="#showFinance"
+                        style="-fx-background-color: transparent; -fx-text-fill: #a0a0b0; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
+            </VBox>
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Logout Button -->
+            <VBox style="-fx-padding: 12 8 16 8;">
+                <Button text="🚪  Logout" maxWidth="Infinity"
+                        onAction="#handleLogout"
+                        style="-fx-background-color: transparent; -fx-text-fill: #ff6b6b; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <StackPane fx:id="contentArea"
+                   style="-fx-background-color: #1a1a2e; -fx-padding: 28;">
+
+            <!-- Default Dashboard Panel -->
+            <VBox fx:id="dashboardPanel" spacing="24">
+                <Label text="Dashboard"
+                       style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
+
+                <!-- Stats Row -->
+                <HBox spacing="16">
+                    <!-- Members Card -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #e9456033; -fx-border-radius: 10; -fx-border-width: 1;">
+                        <Label text="TOTAL MEMBERS"
+                               style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                        <Label fx:id="totalMembersLabel" text="—"
+                               style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #e94560;"/>
+                        <Label text="Registered members"
+                               style="-fx-font-size: 12px; -fx-text-fill: #555566;"/>
+                    </VBox>
+                    <!-- Events Card -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #4ecdc433; -fx-border-radius: 10; -fx-border-width: 1;">
+                        <Label text="TOTAL EVENTS"
+                               style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                        <Label fx:id="totalEventsLabel" text="—"
+                               style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #4ecdc4;"/>
+                        <Label text="Scheduled events"
+                               style="-fx-font-size: 12px; -fx-text-fill: #555566;"/>
+                    </VBox>
+                    <!-- Finance Card -->
+                    <VBox spacing="6" HBox.hgrow="ALWAYS"
+                          style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f33; -fx-border-radius: 10; -fx-border-width: 1;">
+                        <Label text="TRANSACTIONS"
+                               style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
+                        <Label fx:id="totalTransactionsLabel" text="—"
+                               style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #f7dc6f;"/>
+                        <Label text="Financial records"
+                               style="-fx-font-size: 12px; -fx-text-fill: #555566;"/>
+                    </VBox>
+                </HBox>
+
+                <Label text="Welcome to Student Club Management System"
+                       style="-fx-font-size: 14px; -fx-text-fill: #555566;"/>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

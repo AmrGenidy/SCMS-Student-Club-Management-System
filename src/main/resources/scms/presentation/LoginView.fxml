@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="scms.presentation.LoginController"
+           prefWidth="980" prefHeight="640"
+           style="-fx-background-color: #1a1a2e;">
+
+    <VBox alignment="CENTER" spacing="0">
+
+        <!-- Logo / Title Area -->
+        <VBox alignment="CENTER" spacing="8" style="-fx-padding: 0 0 32 0;">
+            <Label text="🎓" style="-fx-font-size: 48px;"/>
+            <Label text="Student Club Management System"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
+            <Label text="Sign in to your account"
+                   style="-fx-font-size: 13px; -fx-text-fill: #888888;"/>
+        </VBox>
+
+        <!-- Login Card -->
+        <VBox spacing="20" maxWidth="400"
+              style="-fx-background-color: #16213e; -fx-background-radius: 12; -fx-padding: 36; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 24, 0, 0, 8);">
+
+            <!-- Student ID Field -->
+            <VBox spacing="6">
+                <Label text="Student ID"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #a0a0b0;"/>
+                <TextField fx:id="studentIdField"
+                           promptText="Enter your student ID"
+                           style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-prompt-text-fill: #555577; -fx-background-radius: 8; -fx-padding: 12 16; -fx-font-size: 14px; -fx-border-color: #2a2a4a; -fx-border-radius: 8; -fx-border-width: 1;"/>
+            </VBox>
+
+            <!-- Role Selector -->
+            <VBox spacing="6">
+                <Label text="Role"
+                       style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #a0a0b0;"/>
+                <ComboBox fx:id="roleComboBox"
+                          promptText="Select your role"
+                          maxWidth="Infinity"
+                          style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 8; -fx-font-size: 14px; -fx-border-color: #2a2a4a; -fx-border-radius: 8; -fx-border-width: 1;"/>
+            </VBox>
+
+            <!-- Error Label -->
+            <Label fx:id="errorLabel"
+                   text=""
+                   wrapText="true"
+                   style="-fx-text-fill: #ff6b6b; -fx-font-size: 12px;"/>
+
+            <!-- Login Button -->
+            <Button fx:id="loginButton"
+                    text="Sign In"
+                    maxWidth="Infinity"
+                    onAction="#handleLogin"
+                    style="-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 14 0; -fx-cursor: hand; -fx-border-width: 0;"/>
+
+        </VBox>
+
+        <!-- Footer -->
+        <Label text="OZU University — Software Engineering"
+               style="-fx-font-size: 11px; -fx-text-fill: #555566; -fx-padding: 24 0 0 0;"/>
+
+    </VBox>
+</StackPane>

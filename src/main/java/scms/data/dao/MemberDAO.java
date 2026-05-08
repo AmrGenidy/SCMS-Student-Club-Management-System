@@ -64,4 +64,25 @@ public class MemberDAO
         }
         return false;
     }
+
+    public java.util.List<Member> getAllMembers() throws SQLException
+    {
+        final String sql = "SELECT name, student_id, email, role FROM members";
+        java.util.List<Member> members = new java.util.ArrayList<>();
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery())
+        {
+            while (resultSet.next())
+            {
+                members.add(new Member(
+                        resultSet.getString("name"),
+                        resultSet.getString("student_id"),
+                        resultSet.getString("email"),
+                        resultSet.getString("role")
+                ));
+            }
+        }
+        return members;
+    }
 }
