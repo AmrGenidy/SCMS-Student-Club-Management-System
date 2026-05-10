@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import scms.application.AccessControl;
 import scms.application.FinanceManager;
+import scms.application.SessionManager;
 import scms.application.model.Transaction;
 
 import java.net.URL;
@@ -15,24 +17,31 @@ import java.util.ResourceBundle;
 
 public class FinanceController implements Initializable
 {
-    @FXML private Label budgetLabel;
+    @FXML private Label    budgetLabel;
     @FXML private TextField idField;
     @FXML private ComboBox<String> typeComboBox;
     @FXML private TextField amountField;
-    @FXML private TextArea descriptionArea;
+    @FXML private TextArea  descriptionArea;
 
-    @FXML private TableView<Transaction> transactionTable;
-    @FXML private TableColumn<Transaction, Date> dateCol;
-    @FXML private TableColumn<Transaction, String> typeCol;
-    @FXML private TableColumn<Transaction, Double> amountCol;
-    @FXML private TableColumn<Transaction, String> descCol;
+    @FXML private TableView<Transaction>           transactionTable;
+    @FXML private TableColumn<Transaction, Date>    dateCol;
+    @FXML private TableColumn<Transaction, String>  typeCol;
+    @FXML private TableColumn<Transaction, Double>  amountCol;
+    @FXML private TableColumn<Transaction, String>  descCol;
 
     private final FinanceManager financeManager = new FinanceManager();
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        typeComboBox.setItems(FXCollections.observableArrayList("INCOME", "EXPENSE"));
+        SessionManager session = SessionContext.get();
+        if (session == null || !AccessControl.canManageFinances(session.getCurrentUser()))
+        {
+            AlertHelper.showValidationError("Access denied. Administrator privileges required.");
+        }
+
+        typeComboBox.setItems(FXCollections.observableArrayList(
+            FinanceManager.TYPE_INCOME, FinanceManager.TYPE_EXPENSE));
         typeComboBox.getSelectionModel().selectFirst();
 
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -40,7 +49,8 @@ public class FinanceController implements Initializable
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-        loadData();
+        // Use Platform.runLater so a DB failure during init doesn't break the FXML loader.
+        javafx.application.Platform.runLater(this::loadData);
     }
 
     private void loadData()
@@ -48,7 +58,7 @@ public class FinanceController implements Initializable
         try
         {
             double budget = financeManager.calculateRemainingBudget();
-            budgetLabel.setText(String.format("$%.2f", budget));
+            budgetLabel.setText(String.format("%.2f TL", budget));
 
             transactionTable.setItems(FXCollections.observableArrayList(financeManager.getAllTransactions()));
         }
@@ -61,6 +71,13 @@ public class FinanceController implements Initializable
     @FXML
     private void handleRecordTransaction()
     {
+        SessionManager session = SessionContext.get();
+        if (session == null || !AccessControl.canManageFinances(session.getCurrentUser()))
+        {
+            AlertHelper.showValidationError("Access denied. Administrator privileges required.");
+            return;
+        }
+
         try
         {
             int id = Integer.parseInt(idField.getText().trim());

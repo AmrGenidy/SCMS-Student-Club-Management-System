@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="scms.presentation.ProfileController"
+      style="-fx-background-color: #1a1a2e;">
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+
+    <Label text="My Profile"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
+
+    <!-- Profile card -->
+    <VBox spacing="14"
+          style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 24; -fx-border-color: #e94560; -fx-border-radius: 10; -fx-border-width: 1;">
+
+        <HBox spacing="12">
+            <Label text="Name:"      prefWidth="120" style="-fx-text-fill: #a0a0b0;"/>
+            <Label fx:id="nameLabel"    text="—" style="-fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+        </HBox>
+        <HBox spacing="12">
+            <Label text="Student ID:" prefWidth="120" style="-fx-text-fill: #a0a0b0;"/>
+            <Label fx:id="idLabel"      text="—" style="-fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+        </HBox>
+        <HBox spacing="12">
+            <Label text="Email:"      prefWidth="120" style="-fx-text-fill: #a0a0b0;"/>
+            <Label fx:id="emailLabel"   text="—" style="-fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+        </HBox>
+        <HBox spacing="12">
+            <Label text="Role:"       prefWidth="120" style="-fx-text-fill: #a0a0b0;"/>
+            <Label fx:id="roleLabel"    text="—" style="-fx-text-fill: #4ecdc4; -fx-font-weight: bold;"/>
+        </HBox>
+        <HBox spacing="12">
+            <Label text="Status:"     prefWidth="120" style="-fx-text-fill: #a0a0b0;"/>
+            <Label fx:id="statusLabel"  text="Active" style="-fx-text-fill: #4ecdc4; -fx-font-weight: bold;"/>
+        </HBox>
+    </VBox>
+
+    <Label text="Upcoming Events"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
+
+    <ListView fx:id="upcomingEventsList" VBox.vgrow="ALWAYS"
+              style="-fx-background-color: #16213e; -fx-border-color: #2a2a4a;"/>
+</VBox>

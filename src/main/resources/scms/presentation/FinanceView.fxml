@@ -3,22 +3,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import java.net.URL?>
+
 <VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scms.presentation.FinanceController" style="-fx-background-color: #1a1a2e;">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
     <Label text="Financial Management" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
 
     <HBox spacing="20">
         <!-- Budget Card -->
-        <VBox spacing="5" prefWidth="250" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f33; -fx-border-radius: 10; -fx-border-width: 1;">
-            <Label text="REMAINING BUDGET" style="-fx-font-size: 11px; -fx-text-fill: #888888;"/>
-            <Label fx:id="budgetLabel" text="$0.00" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #f7dc6f;"/>
+        <VBox spacing="5" prefWidth="250" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f; -fx-border-radius: 10; -fx-border-width: 1;">
+            <Label text="REMAINING BUDGET" style="-fx-text-fill: #888888; -fx-font-size: 11px;"/>
+            <Label fx:id="budgetLabel" text="0.00" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #f7dc6f;"/>
         </VBox>
     </HBox>
 
     <HBox spacing="20" VBox.vgrow="ALWAYS">
         <!-- Add Transaction Form -->
-        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f33; -fx-border-radius: 10;">
+        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #f7dc6f; -fx-border-radius: 10;">
             <Label text="New Transaction" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #f7dc6f;"/>
-
+            
             <VBox spacing="5">
                 <Label text="Transaction ID" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
                 <TextField fx:id="idField" promptText="Enter ID (numeric)" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 5;"/>

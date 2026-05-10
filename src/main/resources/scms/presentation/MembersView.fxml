@@ -4,14 +4,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import java.net.URL?>
+
 <VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scms.presentation.MembersController" style="-fx-background-color: #1a1a2e; -fx-padding: 0;">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
     <Label text="Member Management" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
 
     <HBox spacing="20" VBox.vgrow="ALWAYS">
         <!-- Add Member Form -->
-        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #e9456033; -fx-border-radius: 10;">
+        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #e94560; -fx-border-radius: 10;">
             <Label text="Add New Member" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e94560;"/>
-
+            
             <VBox spacing="5">
                 <Label text="Full Name" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
                 <TextField fx:id="nameField" promptText="Enter name" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 5;"/>
@@ -28,6 +33,11 @@
             </VBox>
 
             <VBox spacing="5">
+                <Label text="Initial Password" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
+                <PasswordField fx:id="passwordField" promptText="Set a starting password" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
                 <Label text="Role" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
                 <ComboBox fx:id="roleComboBox" maxWidth="Infinity" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0;"/>
             </VBox>
@@ -40,9 +50,10 @@
             <TableView fx:id="memberTable" VBox.vgrow="ALWAYS" style="-fx-background-color: #16213e; -fx-border-color: #2a2a4a;">
                 <columns>
                     <TableColumn fx:id="idCol" text="Student ID" prefWidth="120"/>
-                    <TableColumn fx:id="nameCol" text="Name" prefWidth="200"/>
-                    <TableColumn fx:id="emailCol" text="Email" prefWidth="200"/>
-                    <TableColumn fx:id="roleCol" text="Role" prefWidth="100"/>
+                    <TableColumn fx:id="nameCol" text="Name" prefWidth="180"/>
+                    <TableColumn fx:id="emailCol" text="Email" prefWidth="180"/>
+                    <TableColumn fx:id="roleCol" text="Role" prefWidth="80"/>
+                    <TableColumn fx:id="actionCol" text="Action" prefWidth="100"/>
                 </columns>
                 <placeholder>
                     <Label text="No members found" style="-fx-text-fill: #555566;"/>

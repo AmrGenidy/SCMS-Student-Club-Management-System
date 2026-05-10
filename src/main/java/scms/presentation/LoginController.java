@@ -1,14 +1,13 @@
 package scms.presentation;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import scms.application.SessionManager;
@@ -18,65 +17,73 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * Login screen controller.
+ *
+ * <p>The previous version of this controller accepted a Student ID plus a
+ * user-chosen role and waved the request through. That allowed any member to
+ * pick "ADMIN" and gain administrative privileges. This version requires a
+ * Student ID + password, delegates verification to {@link SessionManager}, and
+ * obtains the user's role exclusively from the database row.</p>
+ */
 public class LoginController implements Initializable
 {
-    @FXML private TextField studentIdField;
-    @FXML private ComboBox<String> roleComboBox;
-    @FXML private Label errorLabel;
-    @FXML private Button loginButton;
+    @FXML private TextField     studentIdField;
+    @FXML private PasswordField passwordField;
+    @FXML private Label         errorLabel;
+    @FXML private Button        loginButton;
 
     private final SessionManager sessionManager = new SessionManager();
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        roleComboBox.setItems(FXCollections.observableArrayList("ADMIN", "MEMBER"));
-        roleComboBox.getSelectionModel().selectFirst();
-
-        // Allow pressing Enter in the student ID field to trigger login
+        // Pressing Enter in either field triggers login, matching common UX.
         studentIdField.setOnAction(event -> handleLogin());
+        passwordField.setOnAction(event -> handleLogin());
     }
 
     @FXML
     private void handleLogin()
     {
-        String studentId = studentIdField.getText().trim();
-        String role = roleComboBox.getValue();
+        String studentId = studentIdField.getText() == null ? "" : studentIdField.getText().trim();
+        String password  = passwordField.getText()  == null ? "" : passwordField.getText();
 
         if (studentId.isEmpty())
         {
-            errorLabel.setText("⚠ Please enter your Student ID.");
+            errorLabel.setText("Please enter your Student ID.");
             return;
         }
-        if (role == null)
+        if (password.isEmpty())
         {
-            errorLabel.setText("⚠ Please select a role.");
+            errorLabel.setText("Please enter your password.");
             return;
         }
 
         try
         {
-            boolean success = sessionManager.login(studentId, role);
+            boolean success = sessionManager.login(studentId, password);
             if (success)
             {
                 navigateToDashboard();
             }
             else
             {
-                errorLabel.setText("⚠ Student ID not found. Please check and try again.");
+                // Intentionally generic — do not reveal which of the two was wrong.
+                errorLabel.setText("Invalid Student ID or password.");
             }
         }
         catch (SQLException e)
         {
-            errorLabel.setText("⚠ Database error: " + e.getMessage());
+            errorLabel.setText("Database error: " + e.getMessage());
         }
         catch (IOException e)
         {
-            errorLabel.setText("⚠ Failed to load dashboard: " + e.getMessage());
+            errorLabel.setText("Failed to load dashboard: " + e.getMessage());
         }
         catch (IllegalArgumentException e)
         {
-            errorLabel.setText("⚠ " + e.getMessage());
+            errorLabel.setText(e.getMessage());
         }
     }
 

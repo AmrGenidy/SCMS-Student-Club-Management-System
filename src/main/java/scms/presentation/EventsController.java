@@ -5,10 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import scms.application.AccessControl;
 import scms.application.EventManager;
+import scms.application.SessionManager;
 import scms.application.exception.OverQuotaException;
 import scms.application.model.Event;
+import scms.application.model.Member;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,19 +23,20 @@ import java.util.ResourceBundle;
 
 public class EventsController implements Initializable
 {
-    @FXML private TextField idField;
-    @FXML private TextField nameField;
-    @FXML private DatePicker datePicker;
-    @FXML private TextField locationField;
-    @FXML private TextField quotaField;
+    @FXML private TextField   idField;
+    @FXML private TextField   nameField;
+    @FXML private DatePicker  datePicker;
+    @FXML private TextField   locationField;
+    @FXML private TextField   quotaField;
+    @FXML private VBox        createEventForm;
 
-    @FXML private TableView<Event> eventTable;
-    @FXML private TableColumn<Event, String> nameCol;
-    @FXML private TableColumn<Event, Date> dateCol;
-    @FXML private TableColumn<Event, String> locationCol;
+    @FXML private TableView<Event>           eventTable;
+    @FXML private TableColumn<Event, String>  nameCol;
+    @FXML private TableColumn<Event, Date>    dateCol;
+    @FXML private TableColumn<Event, String>  locationCol;
     @FXML private TableColumn<Event, Integer> quotaCol;
     @FXML private TableColumn<Event, Integer> attendeesCol;
-    @FXML private TableColumn<Event, Void> actionCol;
+    @FXML private TableColumn<Event, Void>    actionCol;
 
     private final EventManager eventManager = new EventManager();
 
@@ -44,8 +49,26 @@ public class EventsController implements Initializable
         quotaCol.setCellValueFactory(new PropertyValueFactory<>("quota"));
         attendeesCol.setCellValueFactory(new PropertyValueFactory<>("currentAttendees"));
 
+        applyRoleVisibility();
         setupActionColumn();
         loadEvents();
+    }
+
+    /**
+     * Hide the "Create Event" form when a non-administrator is viewing.
+     * Members can still see and sign up to events.
+     */
+    private void applyRoleVisibility()
+    {
+        SessionManager session = SessionContext.get();
+        Member user = session == null ? null : session.getCurrentUser();
+        boolean canCreate = AccessControl.canManageEvents(user);
+
+        if (createEventForm != null)
+        {
+            createEventForm.setVisible(canCreate);
+            createEventForm.setManaged(canCreate);
+        }
     }
 
     private void setupActionColumn()
@@ -71,9 +94,12 @@ public class EventsController implements Initializable
                     public void updateItem(Void item, boolean empty)
                     {
                         super.updateItem(item, empty);
-                        if (empty) {
+                        if (empty)
+                        {
                             setGraphic(null);
-                        } else {
+                        }
+                        else
+                        {
                             setGraphic(btn);
                         }
                     }
@@ -88,8 +114,13 @@ public class EventsController implements Initializable
     {
         try
         {
-            // Load all events by passing a date in the past
-            eventTable.setItems(FXCollections.observableArrayList(eventManager.getUpcomingEvents(new Date(0))));
+            SessionManager session = SessionContext.get();
+            Member user = session == null ? null : session.getCurrentUser();
+
+            // Admins see everything (including past), so they can audit. Members
+            // see today and future only — SRS-SCMS-004.3.
+            Date threshold = AccessControl.canManageEvents(user) ? new Date(0) : new Date();
+            eventTable.setItems(FXCollections.observableArrayList(eventManager.getUpcomingEvents(threshold)));
         }
         catch (SQLException e)
         {
@@ -100,6 +131,13 @@ public class EventsController implements Initializable
     @FXML
     private void handleCreateEvent()
     {
+        SessionManager session = SessionContext.get();
+        if (session == null || !AccessControl.canManageEvents(session.getCurrentUser()))
+        {
+            AlertHelper.showValidationError("Access denied. Administrator privileges required.");
+            return;
+        }
+
         try
         {
             int id = Integer.parseInt(idField.getText().trim());
@@ -140,9 +178,17 @@ public class EventsController implements Initializable
 
     private void handleSignUp(Event event)
     {
+        SessionManager session = SessionContext.get();
+        Member user = session == null ? null : session.getCurrentUser();
+        if (!AccessControl.canSignUpForEvents(user))
+        {
+            AlertHelper.showValidationError("You must be logged in to sign up for events.");
+            return;
+        }
+
         try
         {
-            if (eventManager.signMemberUp(event.getEventId()))
+            if (eventManager.signMemberUp(event.getEventId(), user.getStudentId()))
             {
                 AlertHelper.showSuccess("Signed up for " + event.getName() + "!");
                 loadEvents();
@@ -155,6 +201,10 @@ public class EventsController implements Initializable
         catch (OverQuotaException e)
         {
             AlertHelper.showValidationError("Sorry, the event is full.");
+        }
+        catch (IllegalStateException e)
+        {
+            AlertHelper.showValidationError(e.getMessage());
         }
         catch (IllegalArgumentException e)
         {

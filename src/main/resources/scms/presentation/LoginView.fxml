@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.net.URL?>
 
 <StackPane xmlns="http://javafx.com/javafx/17"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="scms.presentation.LoginController"
            prefWidth="980" prefHeight="640"
            style="-fx-background-color: #1a1a2e;">
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
 
     <VBox alignment="CENTER" spacing="0">
 
@@ -35,14 +38,13 @@
                            style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-prompt-text-fill: #555577; -fx-background-radius: 8; -fx-padding: 12 16; -fx-font-size: 14px; -fx-border-color: #2a2a4a; -fx-border-radius: 8; -fx-border-width: 1;"/>
             </VBox>
 
-            <!-- Role Selector -->
+            <!-- Password Field -->
             <VBox spacing="6">
-                <Label text="Role"
+                <Label text="Password"
                        style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #a0a0b0;"/>
-                <ComboBox fx:id="roleComboBox"
-                          promptText="Select your role"
-                          maxWidth="Infinity"
-                          style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 8; -fx-font-size: 14px; -fx-border-color: #2a2a4a; -fx-border-radius: 8; -fx-border-width: 1;"/>
+                <PasswordField fx:id="passwordField"
+                               promptText="Enter your password"
+                               style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-prompt-text-fill: #555577; -fx-background-radius: 8; -fx-padding: 12 16; -fx-font-size: 14px; -fx-border-color: #2a2a4a; -fx-border-radius: 8; -fx-border-width: 1;"/>
             </VBox>
 
             <!-- Error Label -->
@@ -58,6 +60,9 @@
                     onAction="#handleLogin"
                     style="-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 14 0; -fx-cursor: hand; -fx-border-width: 0;"/>
 
+            <!-- Demo accounts hint -->
+            <Label text="Demo: 12345678 / admin123  •  87654321 / member123"
+                   style="-fx-font-size: 10px; -fx-text-fill: #555566;"/>
         </VBox>
 
         <!-- Footer -->

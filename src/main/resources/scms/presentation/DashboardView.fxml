@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.net.URL?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="scms.presentation.DashboardController"
             prefWidth="980" prefHeight="640"
             style="-fx-background-color: #1a1a2e;">
+
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
 
     <!-- Sidebar -->
     <left>
@@ -30,6 +34,9 @@
                 <Button fx:id="btnDashboard" text="📊  Dashboard" maxWidth="Infinity"
                         onAction="#showDashboard"
                         style="-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
+                <Button fx:id="btnProfile" text="👤  My Profile" maxWidth="Infinity"
+                        onAction="#showProfile"
+                        style="-fx-background-color: transparent; -fx-text-fill: #a0a0b0; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
                 <Button fx:id="btnMembers" text="👥  Members" maxWidth="Infinity"
                         onAction="#showMembers"
                         style="-fx-background-color: transparent; -fx-text-fill: #a0a0b0; -fx-font-size: 13px; -fx-background-radius: 8; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-border-width: 0;"/>
@@ -58,7 +65,7 @@
         <StackPane fx:id="contentArea"
                    style="-fx-background-color: #1a1a2e; -fx-padding: 28;">
 
-            <!-- Default Dashboard Panel -->
+            <!-- Default Dashboard Panel (admins only) -->
             <VBox fx:id="dashboardPanel" spacing="24">
                 <Label text="Dashboard"
                        style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>

@@ -1,0 +1,43 @@
+.root {
+    -fx-base: #1a1a2e;
+    -fx-background: #1a1a2e;
+    -fx-control-inner-background: #0f3460;
+}
+
+/* ComboBox Styling */
+.combo-box {
+    -fx-background-color: #0f3460;
+    -fx-background-radius: 8;
+    -fx-border-color: #2a2a4a;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #16213e;
+    -fx-background-radius: 8;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 1;
+}
+
+.combo-box .list-view .list-cell:filled:selected, 
+.combo-box .list-view .list-cell:filled:hover {
+    -fx-background-color: #e94560;
+    -fx-text-fill: white;
+}
+
+/* ScrollBar Styling for Premium Look */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-width: 6;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #444466;
+    -fx-background-radius: 10;
+}

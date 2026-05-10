@@ -3,14 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import java.net.URL?>
+
 <VBox spacing="20" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scms.presentation.EventsController" style="-fx-background-color: #1a1a2e;">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
     <Label text="Event Management" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e0e0e0;"/>
 
     <HBox spacing="20" VBox.vgrow="ALWAYS">
-        <!-- Add Event Form -->
-        <VBox spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #4ecdc433; -fx-border-radius: 10;">
+        <!-- Add Event Form (visible to admins only) -->
+        <VBox fx:id="createEventForm" spacing="15" prefWidth="300" style="-fx-background-color: #16213e; -fx-background-radius: 10; -fx-padding: 20; -fx-border-color: #4ecdc4; -fx-border-radius: 10;">
             <Label text="Create New Event" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4ecdc4;"/>
-
+            
             <VBox spacing="5">
                 <Label text="Event ID" style="-fx-text-fill: #a0a0b0; -fx-font-size: 12px;"/>
                 <TextField fx:id="idField" promptText="Enter event ID (numeric)" style="-fx-background-color: #0f3460; -fx-text-fill: #e0e0e0; -fx-background-radius: 5;"/>

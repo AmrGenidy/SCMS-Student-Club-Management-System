@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public final class DatabaseConnection
 {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/scms";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
+    private static final String DEFAULT_URL      = "jdbc:postgresql://localhost:5432/scms";
+    private static final String DEFAULT_USER     = "postgres";
+    private static final String DEFAULT_PASSWORD = "postgres";
 
     private static DatabaseConnection instance;
     private Connection connection;
@@ -26,11 +26,29 @@ public final class DatabaseConnection
         return instance;
     }
 
+    public static synchronized void resetForTests()
+    {
+        if (instance != null)
+        {
+            try
+            {
+                instance.closeConnection();
+            }
+            catch (SQLException ignored)
+            {
+            }
+            instance = null;
+        }
+    }
+
     public synchronized Connection getConnection() throws SQLException
     {
         if (connection == null || connection.isClosed())
         {
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            String url      = System.getProperty("scms.db.url",      DEFAULT_URL);
+            String user     = System.getProperty("scms.db.user",     DEFAULT_USER);
+            String password = System.getProperty("scms.db.password", DEFAULT_PASSWORD);
+            connection = DriverManager.getConnection(url, user, password);
         }
         return connection;
     }
